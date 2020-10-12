@@ -8,6 +8,7 @@ namespace BookStore.Models
         public Product()
         {
             ProductHasCategory = new HashSet<ProductHasCategory>();
+            Pictures = new HashSet<ProductPicture>();
         }
 
         public int Id { get; set; }
@@ -19,5 +20,6 @@ namespace BookStore.Models
         public DateTime LastUpdate { get; set; }
 
         public virtual ICollection<ProductHasCategory> ProductHasCategory { get; set; }
+        public virtual ICollection<ProductPicture> Pictures { get; set; }
     }
 }

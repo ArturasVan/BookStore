@@ -27,15 +27,13 @@ namespace BookStore.Data
                     .IsUnicode(false);
             });
 
+           // modelBuilder.Entity<Category>().HasData(new Category { Id = 1, Name = "Essay" },
+           //                             new Category { Id = 2, Name = "Novel" });
+
+
             modelBuilder.Entity<OrderHasProduct>(entity =>
             {
                 entity.Property(e => e.Price).HasColumnType("decimal(10, 2)");
-
-                entity.HasOne(d => d.Role)
-                    .WithMany(p => p.OrderHasProduct)
-                    .HasForeignKey(d => d.RoleId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__OrderHasP__RoleI__32E0915F");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.OrderHasProduct)
@@ -43,6 +41,7 @@ namespace BookStore.Data
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__OrderHasP__UserI__31EC6D26");
             });
+
 
             modelBuilder.Entity<Orders>(entity =>
             {
@@ -94,27 +93,11 @@ namespace BookStore.Data
                     .HasConstraintName("FK__ProductHa__Produ__44FF419A");
             });
 
-            modelBuilder.Entity<AppUserRoles>(entity =>
-            {
-                entity.Property(e => e.Name)
-                    .HasMaxLength(45)
-                    .IsUnicode(false);
-            });
+            modelBuilder.Entity<ProductPicture>()
+                        .HasOne(s => s.Product)
+                        .WithMany(g => g.Pictures)
+                        .HasForeignKey(s => s.ProductId);
 
-            modelBuilder.Entity<UserHasRoles>(entity =>
-            {
-                entity.HasOne(d => d.Role)
-                    .WithMany(p => p.UserHasRoles)
-                    .HasForeignKey(d => d.RoleId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__UserHasRo__RoleI__286302EC");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.UserHasRoles)
-                    .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__UserHasRo__UserI__276EDEB3");
-            });
 
             modelBuilder.Entity<ApplicationUser>(entity =>
             {
@@ -150,15 +133,15 @@ namespace BookStore.Data
                     .HasMaxLength(45)
                     .IsUnicode(false);
             });
+
         }
         public virtual DbSet<Category> Category { get; set; }
         public virtual DbSet<OrderHasProduct> OrderHasProduct { get; set; }
         public virtual DbSet<Orders> Orders { get; set; }
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<ProductHasCategory> ProductHasCategory { get; set; }
-        public virtual DbSet<AppUserRoles> AppUserRoles { get; set; }
-        public virtual DbSet<UserHasRoles> UserHasRoles { get; set; }
         public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
-
+        public virtual DbSet<ProductPicture> ProductPictures { get; set; }
+        
     }
 }

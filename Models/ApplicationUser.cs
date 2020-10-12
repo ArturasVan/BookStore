@@ -10,7 +10,6 @@ namespace BookStore.Models
         {
             OrderHasProduct = new HashSet<OrderHasProduct>();
             Orders = new HashSet<Orders>();
-            UserHasRoles = new HashSet<UserHasRoles>();
         }
 
         public string Firstname { get; set; }
@@ -26,6 +25,6 @@ namespace BookStore.Models
 
         public virtual ICollection<OrderHasProduct> OrderHasProduct { get; set; }
         public virtual ICollection<Orders> Orders { get; set; }
-        public virtual ICollection<UserHasRoles> UserHasRoles { get; set; }
+
     }
 }

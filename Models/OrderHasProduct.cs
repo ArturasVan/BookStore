@@ -10,7 +10,6 @@ namespace BookStore.Models
         public int RoleId { get; set; }
         public decimal Price { get; set; }
 
-        public virtual AppUserRoles Role { get; set; }
         public virtual ApplicationUser User { get; set; }
     }
 }

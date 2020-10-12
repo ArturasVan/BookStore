@@ -19,23 +19,6 @@ namespace BookStore.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("BookStore.Models.AppUserRoles", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("varchar(45)")
-                        .HasMaxLength(45)
-                        .IsUnicode(false);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AppUserRoles");
-                });
-
             modelBuilder.Entity("BookStore.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -72,8 +55,6 @@ namespace BookStore.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("RoleId");
 
                     b.ToTable("OrderHasProduct");
                 });
@@ -161,26 +142,24 @@ namespace BookStore.Data.Migrations
                     b.ToTable("ProductHasCategory");
                 });
 
-            modelBuilder.Entity("BookStore.Models.UserHasRoles", b =>
+            modelBuilder.Entity("BookStore.Models.ProductPicture", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("RoleId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("ProductId");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserHasRoles");
+                    b.ToTable("ProductPictures");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -448,12 +427,6 @@ namespace BookStore.Data.Migrations
                         .WithMany("OrderHasProduct")
                         .HasForeignKey("ApplicationUserId")
                         .HasConstraintName("FK__OrderHasP__UserI__31EC6D26");
-
-                    b.HasOne("BookStore.Models.AppUserRoles", "Role")
-                        .WithMany("OrderHasProduct")
-                        .HasForeignKey("RoleId")
-                        .HasConstraintName("FK__OrderHasP__RoleI__32E0915F")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("BookStore.Models.Orders", b =>
@@ -479,18 +452,13 @@ namespace BookStore.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("BookStore.Models.UserHasRoles", b =>
+            modelBuilder.Entity("BookStore.Models.ProductPicture", b =>
                 {
-                    b.HasOne("BookStore.Models.AppUserRoles", "Role")
-                        .WithMany("UserHasRoles")
-                        .HasForeignKey("RoleId")
-                        .HasConstraintName("FK__UserHasRo__RoleI__286302EC")
+                    b.HasOne("BookStore.Models.Product", "Product")
+                        .WithMany("Pictures")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("BookStore.Models.ApplicationUser", "User")
-                        .WithMany("UserHasRoles")
-                        .HasForeignKey("UserId")
-                        .HasConstraintName("FK__UserHasRo__UserI__276EDEB3");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
