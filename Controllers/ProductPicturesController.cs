@@ -6,17 +6,22 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BookStore.Data;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace BookStore.Models
 {
     public class ProductPicturesController : Controller
     {
+        private readonly IWebHostEnvironment _hostEnvironment;
         private readonly ApplicationDbContext _context;
 
-        public ProductPicturesController(ApplicationDbContext context)
+        public ProductPicturesController(ApplicationDbContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
+            _hostEnvironment = hostEnvironment;
         }
+
 
         // GET: ProductPictures
         public async Task<IActionResult> Index()
@@ -56,10 +61,20 @@ namespace BookStore.Models
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ProductId,Url")] ProductPicture productPicture)
+        public async Task<IActionResult> Create([Bind("Id,ProductId,ImageFile")] ProductPicture productPicture)
         {
             if (ModelState.IsValid)
             {
+                string wwwRootPath = _hostEnvironment.WebRootPath;
+                string fileName = Path.GetFileNameWithoutExtension(productPicture.ImageFile.FileName);
+                string extension = Path.GetExtension(productPicture.ImageFile.FileName);
+                productPicture.Url = fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
+                string path = Path.Combine(wwwRootPath + "/Image/", fileName);
+                using (var fileStream = new FileStream(path, FileMode.Create))
+                {
+                    await productPicture.ImageFile.CopyToAsync(fileStream);
+                }
+                //Insert record
                 _context.Add(productPicture);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -146,6 +161,12 @@ namespace BookStore.Models
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var productPicture = await _context.ProductPictures.FindAsync(id);
+
+            //delete image from wwwroot/image
+            var imagePath = Path.Combine(_hostEnvironment.WebRootPath, "image", productPicture.Url);
+            if (System.IO.File.Exists(imagePath))
+                System.IO.File.Delete(imagePath);
+
             _context.ProductPictures.Remove(productPicture);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
