@@ -49,10 +49,11 @@
         </dd>
         @foreach (var item in Model.Pictures)
         {
-             <dd class="col-sm-10">
+            <dd class="col-sm-10">
                 <img class="img" src="@("/image/"+item.Url)" asp-append-version="true" width="250px" height="250px" />
-             </dd> 
-             }
+            </dd>
+
+        }
     </dl>
 </div>
 <div>
