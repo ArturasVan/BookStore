@@ -1,10 +1,13 @@
-﻿using System;
+﻿using BookStore.Data;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BookStore.Models
 {
     public partial class Product
     {
+
         public Product()
         {
             ProductHasCategory = new HashSet<ProductHasCategory>();
@@ -21,5 +24,9 @@ namespace BookStore.Models
 
         public virtual ICollection<ProductHasCategory> ProductHasCategory { get; set; }
         public virtual ICollection<ProductPicture> Pictures { get; set; }
+
+
+
+
     }
 }

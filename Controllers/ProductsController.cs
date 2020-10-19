@@ -149,5 +149,15 @@ namespace BookStore
         {
             return _context.Product.Any(e => e.Id == id);
         }
+        public List<Product> FindAll()
+        {
+            return _context.Product.ToList();
+        }
+
+        public Product find(int id)
+        {
+            return _context.Product.Single(p => p.Id.Equals(id));
+        }
+
     }
 }
