@@ -26,14 +26,14 @@
         @foreach (var item in ViewBag.cart)
         {
     <tr>
-        <td><a asp-controller="cart" asp-action="remove" asp-route-id="@item.Product.Id">Remove</a></td>
-        <td>@item.Product.Id</td>
+        <td><a asp-controller="cart" asp-action="remove" asp-route-id="@item.Product.ProductId">Remove</a></td>
+        <td>@item.Product.ProductId</td>
         <td>@item.Product.Title</td>
         <td></td>
         <td>@item.Product.Price</td>
         <td>@item.Quantity</td>
-        <td><a asp-controller="cart" asp-action="minus" asp-route-id="@item.Product.Id">-</a>
-            <a asp-controller="cart" asp-action="plus" asp-route-id="@item.Product.Id">+</a></td>
+        <td><a asp-controller="cart" asp-action="minus" asp-route-id="@item.Product.ProductId">-</a>
+            <a asp-controller="cart" asp-action="plus" asp-route-id="@item.Product.ProductId">+</a></td>
         <td>@ViewBag.total</td>
     </tr>
         }
