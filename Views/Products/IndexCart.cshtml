@@ -1,0 +1,86 @@
+﻿@model IEnumerable<BookStore.Models.Shopingcartview>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Pictures
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.product.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.product.Autor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.product.ReleaseYear)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.product.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.product.Info)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.product.LastUpdate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @foreach (var pic in item.product.Pictures)
+                    {
+                        <img class="img" src="./image/@pic.Url" asp-append-version="true" width="120" height="100" />
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.product.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.product.Autor)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.product.ReleaseYear)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.product.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.product.Info)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.product.LastUpdate)
+                </td>
+                <td>  <input type="number" value="@item.Quantity" />  </td>
+                <td>
+                <td>  <input type="number" value="@item.Quantity" />  </td>
+                <td>
+                <a asp-controller="cart" class="quantity" asp-route-id="id_form-0-quantity" min="0" name="form-0-quantity" value="1" type="number"></a>
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.product.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.product.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.product.Id">Delete</a>
+                        <a asp-controller="cart" asp-action="buy" asp-route-id="@item.product.Id">Buy Now</a>
+                    </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

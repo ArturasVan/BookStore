@@ -60,6 +60,34 @@ namespace BookStore.Controllers
             }
             return RedirectToAction("Index");
         }
+        [Route("buy2/{id}/{count}")]
+        public IActionResult BuyMultiple(int id, int count)
+        {
+            Product product = new Product();
+            if (SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart") == null)
+            {
+                var buyproduct = _context.Product.Single(p => p.Id.Equals(id));
+                List<Item> cart = new List<Item>();
+                cart.Add(new Item { Product = buyproduct, Quantity = count });
+                SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
+            }
+            else
+            {
+                List<Item> cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+                int index = isExist(id);
+                if (index != -1)
+                {
+                    cart[index].Quantity++;
+                }
+                else
+                {
+                    var buyproduct = _context.Product.Single(p => p.Id.Equals(id));
+                    cart.Add(new Item { Product = buyproduct, Quantity = count });
+                }
+                SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
+            }
+            return RedirectToAction("Index");
+        }
 
         [Route("remove/{id}")]
         public IActionResult Remove(int id)
@@ -70,6 +98,27 @@ namespace BookStore.Controllers
             SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
             return RedirectToAction("Index");
         }
+
+        [Route("minus/{id}")]
+        public IActionResult Minus(int id)
+        {
+            List<Item> cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+            int index = isExist(id);
+            cart[index].Quantity--;
+            SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
+            return RedirectToAction("Index");
+        }
+        [Route("plus/{id}")]
+        public IActionResult Plus(int id)
+        {
+            List<Item> cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+            int index = isExist(id);
+            cart[index].Quantity++;
+            SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
+            return RedirectToAction("Index");
+        }
+
+
 
         private int isExist(int id)
         {
