@@ -38,30 +38,38 @@ namespace BookStore.Data.Migrations
 
             modelBuilder.Entity("BookStore.Models.OrderHasProduct", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(10, 2)");
-
-                    b.Property<int>("RoleId")
+                    b.Property<int?>("OrdersOrderId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderId", "ProductId");
 
                     b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("OrdersOrderId");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("OrderHasProduct");
                 });
 
             modelBuilder.Entity("BookStore.Models.Orders", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("OrderId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -77,7 +85,7 @@ namespace BookStore.Data.Migrations
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.HasKey("Id");
+                    b.HasKey("OrderId");
 
                     b.HasIndex("ApplicationUserId");
 
@@ -86,7 +94,7 @@ namespace BookStore.Data.Migrations
 
             modelBuilder.Entity("BookStore.Models.Product", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ProductId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -115,7 +123,7 @@ namespace BookStore.Data.Migrations
                         .HasMaxLength(45)
                         .IsUnicode(false);
 
-                    b.HasKey("Id");
+                    b.HasKey("ProductId");
 
                     b.ToTable("Product");
                 });
@@ -423,10 +431,19 @@ namespace BookStore.Data.Migrations
 
             modelBuilder.Entity("BookStore.Models.OrderHasProduct", b =>
                 {
-                    b.HasOne("BookStore.Models.ApplicationUser", "User")
+                    b.HasOne("BookStore.Models.ApplicationUser", null)
                         .WithMany("OrderHasProduct")
-                        .HasForeignKey("ApplicationUserId")
-                        .HasConstraintName("FK__OrderHasP__UserI__31EC6D26");
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("BookStore.Models.Orders", "Orders")
+                        .WithMany("OrderHasProducts")
+                        .HasForeignKey("OrdersOrderId");
+
+                    b.HasOne("BookStore.Models.Product", "Product")
+                        .WithMany("OrderHasProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BookStore.Models.Orders", b =>

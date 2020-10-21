@@ -38,7 +38,7 @@ namespace BookStore.Controllers
             Product product = new Product();
             if (SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart") == null)
             {
-                var buyproduct = _context.Product.Single(p => p.Id.Equals(id));
+                var buyproduct = _context.Product.Single(p => p.ProductId.Equals(id));
                 List<Item> cart = new List<Item>();
                 cart.Add(new Item { Product = buyproduct, Quantity = 1 });
                 SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
@@ -53,7 +53,7 @@ namespace BookStore.Controllers
                 }
                 else
                 {
-                    var buyproduct = _context.Product.Single(p => p.Id.Equals(id));
+                    var buyproduct = _context.Product.Single(p => p.ProductId.Equals(id));
                     cart.Add(new Item { Product = buyproduct, Quantity = 1 });
                 }
                 SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
@@ -66,7 +66,7 @@ namespace BookStore.Controllers
             Product product = new Product();
             if (SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart") == null)
             {
-                var buyproduct = _context.Product.Single(p => p.Id.Equals(id));
+                var buyproduct = _context.Product.Single(p => p.ProductId.Equals(id));
                 List<Item> cart = new List<Item>();
                 cart.Add(new Item { Product = buyproduct, Quantity = count });
                 SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
@@ -81,7 +81,7 @@ namespace BookStore.Controllers
                 }
                 else
                 {
-                    var buyproduct = _context.Product.Single(p => p.Id.Equals(id));
+                    var buyproduct = _context.Product.Single(p => p.ProductId.Equals(id));
                     cart.Add(new Item { Product = buyproduct, Quantity = count });
                 }
                 SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
@@ -125,7 +125,7 @@ namespace BookStore.Controllers
             List<Item> cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
             for (int i = 0; i < cart.Count; i++)
             {
-                if (cart[i].Product.Id.Equals(id))
+                if (cart[i].Product.ProductId.Equals(id))
                 {
                     return i;
                 }

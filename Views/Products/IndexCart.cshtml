@@ -73,10 +73,10 @@
                 <a asp-controller="cart" class="quantity" asp-route-id="id_form-0-quantity" min="0" name="form-0-quantity" value="1" type="number"></a>
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.product.Id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.product.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.product.Id">Delete</a>
-                        <a asp-controller="cart" asp-action="buy" asp-route-id="@item.product.Id">Buy Now</a>
+                        <a asp-action="Edit" asp-route-id="@item.product.ProductId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.product.ProductId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.product.ProductId">Delete</a>
+                        <a asp-controller="cart" asp-action="buy" asp-route-id="@item.product.ProductId">Buy Now</a>
                     </td>
             </tr>
         }

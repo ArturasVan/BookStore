@@ -5,11 +5,12 @@ namespace BookStore.Models
 {
     public partial class OrderHasProduct
     {
-        public int Id { get; set; }
-        public string ApplicationUserId { get; set; }
-        public int RoleId { get; set; }
+        public int OrderId { get; set; }
+        public Orders Orders { get; set; }
+        public int ProductId { get; set; }
+        public Product Product { get; set; }
         public decimal Price { get; set; }
+        public int Quantity { get; set; }
 
-        public virtual ApplicationUser User { get; set; }
     }
 }

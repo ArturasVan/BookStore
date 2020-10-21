@@ -14,7 +14,7 @@ namespace BookStore.Models
             Pictures = new HashSet<ProductPicture>();
         }
 
-        public int Id { get; set; }
+        public int ProductId { get; set; }
         public string Title { get; set; }
         public string Autor { get; set; }
         public int ReleaseYear { get; set; }
@@ -24,6 +24,7 @@ namespace BookStore.Models
 
         public virtual ICollection<ProductHasCategory> ProductHasCategory { get; set; }
         public virtual ICollection<ProductPicture> Pictures { get; set; }
+        public virtual ICollection<OrderHasProduct> OrderHasProducts { get; set; }
 
 
 

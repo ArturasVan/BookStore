@@ -36,7 +36,7 @@ namespace BookStore
 
             var orders = await _context.Orders
                 .Include(o => o.ApplicationUser)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.OrderId == id);
             if (orders == null)
             {
                 return NotFound();
@@ -93,7 +93,7 @@ namespace BookStore
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Amount,OrderDate,ApplicationUserId")] Orders orders)
         {
-            if (id != orders.Id)
+            if (id != orders.OrderId)
             {
                 return NotFound();
             }
@@ -107,7 +107,7 @@ namespace BookStore
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!OrdersExists(orders.Id))
+                    if (!OrdersExists(orders.OrderId))
                     {
                         return NotFound();
                     }
@@ -132,7 +132,7 @@ namespace BookStore
 
             var orders = await _context.Orders
                 .Include(o => o.ApplicationUser)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.OrderId == id);
             if (orders == null)
             {
                 return NotFound();
@@ -154,7 +154,7 @@ namespace BookStore
 
         private bool OrdersExists(int id)
         {
-            return _context.Orders.Any(e => e.Id == id);
+            return _context.Orders.Any(e => e.OrderId == id);
         }
     }
 }

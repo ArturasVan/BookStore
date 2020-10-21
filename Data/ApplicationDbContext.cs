@@ -27,21 +27,11 @@ namespace BookStore.Data
                     .IsUnicode(false);
             });
 
-           // modelBuilder.Entity<Category>().HasData(new Category { Id = 1, Name = "Essay" },
-           //                             new Category { Id = 2, Name = "Novel" });
+            // modelBuilder.Entity<Category>().HasData(new Category { Id = 1, Name = "Essay" },
+            //                             new Category { Id = 2, Name = "Novel" });
 
 
-            modelBuilder.Entity<OrderHasProduct>(entity =>
-            {
-                entity.Property(e => e.Price).HasColumnType("decimal(10, 2)");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.OrderHasProduct)
-                    .HasForeignKey(d => d.ApplicationUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__OrderHasP__UserI__31EC6D26");
-            });
-
+            modelBuilder.Entity<OrderHasProduct>().HasKey(sc => new { sc.OrderId, sc.ProductId });
 
             modelBuilder.Entity<Orders>(entity =>
             {

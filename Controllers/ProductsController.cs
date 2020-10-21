@@ -34,7 +34,7 @@ namespace BookStore
             }
 
             var product = await _context.Product
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.ProductId == id);
             if (product == null)
             {
                 return NotFound();
@@ -88,7 +88,7 @@ namespace BookStore
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Autor,ReleaseYear,Price,Info,LastUpdate")] Product product)
         {
-            if (id != product.Id)
+            if (id != product.ProductId)
             {
                 return NotFound();
             }
@@ -102,7 +102,7 @@ namespace BookStore
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductExists(product.Id))
+                    if (!ProductExists(product.ProductId))
                     {
                         return NotFound();
                     }
@@ -125,7 +125,7 @@ namespace BookStore
             }
 
             var product = await _context.Product
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.ProductId == id);
             if (product == null)
             {
                 return NotFound();
@@ -147,7 +147,7 @@ namespace BookStore
 
         private bool ProductExists(int id)
         {
-            return _context.Product.Any(e => e.Id == id);
+            return _context.Product.Any(e => e.ProductId == id);
         }
         public List<Product> FindAll()
         {
@@ -156,7 +156,7 @@ namespace BookStore
 
         public Product find(int id)
         {
-            return _context.Product.Single(p => p.Id.Equals(id));
+            return _context.Product.Single(p => p.ProductId.Equals(id));
         }
 
     }
