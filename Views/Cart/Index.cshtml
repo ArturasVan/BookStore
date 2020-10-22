@@ -34,7 +34,7 @@
         <td>@item.Quantity</td>
         <td><a asp-controller="cart" asp-action="minus" asp-route-id="@item.Product.ProductId">-</a>
             <a asp-controller="cart" asp-action="plus" asp-route-id="@item.Product.ProductId">+</a></td>
-        <td>@ViewBag.total</td>
+        <td>@(item.Product.Price * item.Quantity)</td>
     </tr>
         }
         <tr>

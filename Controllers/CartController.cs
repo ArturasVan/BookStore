@@ -7,17 +7,22 @@ using BookStore.Models;
 using Microsoft.AspNetCore.Mvc;
 using BookStore.Controllers;
 using BookStore.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace BookStore.Controllers
 {
     public class CartController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private UserManager<ApplicationUser> _userManager;
 
-        public CartController(ApplicationDbContext context)
+        public CartController(UserManager<ApplicationUser> userManager,ApplicationDbContext context)
         {
             _context = context;
+            _userManager = userManager;
         }
+        
+
 
         [Route("index")]
         public IActionResult Index()
@@ -25,12 +30,41 @@ namespace BookStore.Controllers
             var cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
 
             ViewBag.cart = cart;
+            
             ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
             if (ViewBag.total == null) { return RedirectToAction("Products", "Index"); }
 
 
             return View();
         }
+
+        [Route("orderCart")]
+        public async Task<IActionResult> OrderAsync()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+
+            List<Item> cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+
+
+            //foreach (var item in cart)
+            //{   _context.OrderHasProduct.Add()
+            //
+            //}
+            //newShoppingcart.products.Add(product);
+            //newShoppingcart.userID = userId;
+            //_context.Shoppingcarts.Add(newShoppingcart);
+            //_context.SaveChanges();
+
+            //cart[index].Quantity++;
+            SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
+            return RedirectToAction("Index");
+        }
+
+
+
+
+
 
         [Route("buy/{id}")]
         public IActionResult Buy(int id)
@@ -117,7 +151,7 @@ namespace BookStore.Controllers
             SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
             return RedirectToAction("Index");
         }
-
+        
 
 
         private int isExist(int id)

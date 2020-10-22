@@ -36,6 +36,7 @@ namespace BookStore
                 .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders(); ;
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddHttpContextAccessor();
 
             services.AddMvc();
             services.AddSession();
