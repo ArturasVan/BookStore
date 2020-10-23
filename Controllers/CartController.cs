@@ -8,11 +8,15 @@ using Microsoft.AspNetCore.Mvc;
 using BookStore.Controllers;
 using BookStore.Data;
 using Microsoft.AspNetCore.Identity;
+using SQLitePCL;
+using Microsoft.AspNetCore.Http;
 
 namespace BookStore.Controllers
 {
     public class CartController : Controller
     {
+
+
         private readonly ApplicationDbContext _context;
         private UserManager<ApplicationUser> _userManager;
 
@@ -30,35 +34,58 @@ namespace BookStore.Controllers
             var cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
 
             ViewBag.cart = cart;
-            
+
+            if (ViewBag.total == null) { return RedirectToAction("Index", "Products"); }
+
             ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
-            if (ViewBag.total == null) { return RedirectToAction("Products", "Index"); }
+            
 
 
             return View();
         }
 
-        [Route("orderCart")]
-        public async Task<IActionResult> OrderAsync()
+        [Route("ProcessOrder")]
+        public async Task<IActionResult> ProcessOrder(IFormCollection frc)
         {
             var user = await _userManager.GetUserAsync(User);
 
 
             List<Item> cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
 
+            Orders order = new Orders()
+            {   
+                
+               // Amount = ViewBag.total,
+                ApplicationUserId = user.Id,
+                OrderDate = DateTime.Now,
+                Firstname = frc["cusFirstName"],
+                Lastname = frc["cusLastName"],
+                DeliveryAddress = frc["cusAddress"],
+                DeliveryCity = frc["cusCity"],
+                DeliveryZip = frc["cusZip"],
+                PhoneNumber = frc["cusPhone"],
+            };
+            _context.Orders.Add(order);
+            _context.SaveChanges();
 
-            //foreach (var item in cart)
-            //{   _context.OrderHasProduct.Add()
-            //
-            //}
-            //newShoppingcart.products.Add(product);
-            //newShoppingcart.userID = userId;
-            //_context.Shoppingcarts.Add(newShoppingcart);
-            //_context.SaveChanges();
+            foreach (var item in cart)
+            {
+                OrderHasProduct orderHasProduct = new OrderHasProduct()
+                {
 
-            //cart[index].Quantity++;
+                    OrderId = order.OrderId,
+                    ProductId = item.Product.ProductId,
+                    Quantity = item.Quantity,
+                    Price = item.Product.Price
+                };
+                _context.OrderHasProduct.Add(orderHasProduct);
+                _context.SaveChanges();
+            }
+
+            cart.Clear();
+            
             SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
-            return RedirectToAction("Index");
+            return View("OrderSucess");
         }
 
 
@@ -151,8 +178,32 @@ namespace BookStore.Controllers
             SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
             return RedirectToAction("Index");
         }
-        
 
+        [Route("CheckOut")]
+        public IActionResult CheckOut()
+        {
+            var cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+
+            ViewBag.cart = cart;
+
+            ViewBag.total = cart.Sum(item => item.Product.Price * item.Quantity);
+            return View("CheckOut");
+        }
+
+        public ActionResult CartSummary()
+        {
+            var cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+            ViewBag.cart = cart;
+            var itemCount = 0;
+
+            foreach (var item in cart)
+            {
+                itemCount++;
+            }
+
+            ViewData["CartCount"] = itemCount; // count Qty in your cart
+            return PartialView("CartSummary");
+        }
 
         private int isExist(int id)
         {

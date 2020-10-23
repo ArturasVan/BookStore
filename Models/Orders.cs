@@ -14,6 +14,13 @@ namespace BookStore.Models
 
 
         public string ApplicationUserId { get; set; }
+        
+        public string Firstname { get; set; }
+        public string Lastname { get; set; }
+        public string DeliveryAddress { get; set; }
+        public string DeliveryCity{ get; set; }
+        public string DeliveryZip { get; set; }
+        public string PhoneNumber { get; set; }
 
         public virtual ApplicationUser ApplicationUser { get; set; }
         public ICollection<OrderHasProduct> OrderHasProducts { get; set; }

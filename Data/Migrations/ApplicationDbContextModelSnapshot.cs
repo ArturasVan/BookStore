@@ -80,10 +80,28 @@ namespace BookStore.Data.Migrations
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("DeliveryAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DeliveryCity")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DeliveryZip")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Firstname")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Lastname")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("OrderDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("OrderId");
 
@@ -417,11 +435,6 @@ namespace BookStore.Data.Migrations
                         .IsUnicode(false);
 
                     b.Property<string>("Lastname")
-                        .HasColumnType("varchar(45)")
-                        .HasMaxLength(45)
-                        .IsUnicode(false);
-
-                    b.Property<string>("PhoneNo")
                         .HasColumnType("varchar(45)")
                         .HasMaxLength(45)
                         .IsUnicode(false);

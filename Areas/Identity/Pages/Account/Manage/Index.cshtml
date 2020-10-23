@@ -1,5 +1,12 @@
 ﻿@page
 @model IndexModel
+@using Microsoft.AspNetCore.Identity
+@using BookStore.Models;
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    var user = await UserManager.GetUserAsync(User);
+}
 @{
     ViewData["Title"] = "Profile";
     ViewData["ActivePage"] = ManageNavPages.Index;
@@ -14,6 +21,25 @@
             <div class="form-group">
                 <label asp-for="Username"></label>
                 <input asp-for="Username" class="form-control" disabled />
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Firstname"></label>
+                <input asp-for="Input.Firstname" class="form-control" />
+            </div><div class="form-group">
+                <label asp-for="Input.Lastname"></label>
+                <input asp-for="Input.Lastname" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.DeliveryAddress"></label>
+                <input asp-for="Input.DeliveryAddress" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.DeliveryCity"></label>
+                <input asp-for="Input.DeliveryCity" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.DeliveryZip"></label>
+                <input asp-for="Input.DeliveryZip" class="form-control" />
             </div>
             <div class="form-group">
                 <label asp-for="Input.PhoneNumber"></label>

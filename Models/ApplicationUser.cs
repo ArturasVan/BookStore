@@ -21,7 +21,6 @@ namespace BookStore.Models
         public int DeliveryZip { get; set; }
         public string DeliveryCity { get; set; }
         public string EmailAddress { get; set; }
-        public string PhoneNo { get; set; }
 
         public virtual ICollection<OrderHasProduct> OrderHasProduct { get; set; }
         public virtual ICollection<Orders> Orders { get; set; }

@@ -33,6 +33,28 @@ namespace BookStore.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
+
+
+            [DataType(DataType.Text)]
+            [Display(Name = "First Name")]
+            public string Firstname { get; set; }
+
+            [DataType(DataType.Text)]
+            [Display(Name = "Last name")]
+            public string Lastname { get; set; }
+
+            [DataType(DataType.Text)]
+            [Display(Name = "Address")]
+            public string DeliveryAddress { get; set; }
+
+            [DataType(DataType.Text)]
+            [Display(Name = "City")]
+            public string DeliveryCity { get; set; }
+            
+            
+            [Display(Name = "Zip")]
+            public int DeliveryZip { get; set; }
+
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
@@ -42,11 +64,21 @@ namespace BookStore.Areas.Identity.Pages.Account.Manage
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-
+            //var firstName = user.Firstname;
+            //var lastName = user.Lastname;
+            //var address = user.DeliveryAddress;
+            //var city = user.DeliveryCity;
+            //var zip = user.DeliveryZip;
+            
             Username = userName;
 
             Input = new InputModel
             {
+                Firstname = user.Firstname,
+                Lastname = user.Lastname,
+                DeliveryAddress = user.DeliveryAddress,
+                DeliveryCity = user.DeliveryCity,
+                DeliveryZip = user.DeliveryZip,
                 PhoneNumber = phoneNumber
             };
         }
@@ -87,6 +119,38 @@ namespace BookStore.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
+
+            if (Input.Firstname != user.Firstname)
+            {
+                user.Firstname = Input.Firstname;
+            }
+
+            if (Input.Lastname != user.Lastname)
+            {
+                user.Lastname = Input.Lastname;
+            }
+
+            if (Input.DeliveryAddress != user.DeliveryAddress)
+            {
+                user.DeliveryAddress = Input.DeliveryAddress;
+            }
+
+            if (Input.DeliveryCity != user.DeliveryCity)
+            {
+                user.DeliveryCity = Input.DeliveryCity;
+            }
+
+            if (Input.DeliveryZip != user.DeliveryZip)
+            {
+                user.DeliveryZip = Input.DeliveryZip;
+            }
+
+            if (Input.DeliveryZip != user.DeliveryZip)
+            {
+                user.DeliveryZip = Input.DeliveryZip;
+            }
+
+            await _userManager.UpdateAsync(user);
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";

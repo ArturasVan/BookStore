@@ -121,9 +121,7 @@ namespace BookStore.Data
                     .HasMaxLength(45)
                     .IsUnicode(false);
 
-                entity.Property(e => e.PhoneNo)
-                    .HasMaxLength(45)
-                    .IsUnicode(false);
+
             });
 
         }

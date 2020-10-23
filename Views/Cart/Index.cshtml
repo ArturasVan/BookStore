@@ -1,7 +1,7 @@
 ﻿@{
-    Layout = null;
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <!DOCTYPE html>
 
 <html>
@@ -25,17 +25,19 @@
         </tr>
         @foreach (var item in ViewBag.cart)
         {
-    <tr>
-        <td><a asp-controller="cart" asp-action="remove" asp-route-id="@item.Product.ProductId">Remove</a></td>
-        <td>@item.Product.ProductId</td>
-        <td>@item.Product.Title</td>
-        <td></td>
-        <td>@item.Product.Price</td>
-        <td>@item.Quantity</td>
-        <td><a asp-controller="cart" asp-action="minus" asp-route-id="@item.Product.ProductId">-</a>
-            <a asp-controller="cart" asp-action="plus" asp-route-id="@item.Product.ProductId">+</a></td>
-        <td>@(item.Product.Price * item.Quantity)</td>
-    </tr>
+            <tr>
+                <td><a asp-controller="cart" asp-action="remove" asp-route-id="@item.Product.ProductId">Remove</a></td>
+                <td>@item.Product.ProductId</td>
+                <td>@item.Product.Title</td>
+                <td></td>
+                <td>@item.Product.Price</td>
+                <td>@item.Quantity</td>
+                <td>
+                    <a asp-controller="cart" asp-action="minus" asp-route-id="@item.Product.ProductId">-</a>
+                    <a asp-controller="cart" asp-action="plus" asp-route-id="@item.Product.ProductId">+</a>
+                </td>
+                <td>@(item.Product.Price * item.Quantity)</td>
+            </tr>
         }
         <tr>
             <td align="right" colspan="6">Sum</td>
@@ -44,8 +46,10 @@
             </td>
         </tr>
     </table>
+    <br />
+
     <br>
     <a asp-controller="products" asp-action="index">Continue Shopping</a>
-
+    <a asp-controller="cart" asp-action="checkout">Check Out</a>
 </body>
 </html>
