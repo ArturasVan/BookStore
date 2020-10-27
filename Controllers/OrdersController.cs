@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BookStore.Data;
 using BookStore.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace BookStore
 {
@@ -20,12 +22,23 @@ namespace BookStore
         }
 
         // GET: Orders
+        [Authorize]
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Orders.Include(o => o.ApplicationUser);
-            return View(await applicationDbContext.ToListAsync());
-        }
+            var orders = from o in _context.Orders.Include(o => o.OrderHasProducts)
+                           select o;
 
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (User.IsInRole("User"))
+            {
+                orders = orders.Where(s => s.ApplicationUserId.Equals(userId));
+            }
+            
+            OrderHasProductsVM model = new OrderHasProductsVM();
+
+            return View(await orders.ToListAsync());
+        }
+        [Authorize]
         // GET: Orders/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -35,7 +48,7 @@ namespace BookStore
             }
 
             var orders = await _context.Orders
-                .Include(o => o.ApplicationUser)
+                .Include(o => o.OrderHasProducts)
                 .FirstOrDefaultAsync(m => m.OrderId == id);
             if (orders == null)
             {
@@ -57,7 +70,7 @@ namespace BookStore
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Amount,OrderDate,ApplicationUserId")] Orders orders)
+        public async Task<IActionResult> Create([Bind("OrderId,Amount,OrderDate,ApplicationUserId,Firstname,Lastname,DeliveryAddress,DeliveryCity,DeliveryZip,PhoneNumber")] Orders orders)
         {
             if (ModelState.IsValid)
             {
@@ -91,7 +104,7 @@ namespace BookStore
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Amount,OrderDate,ApplicationUserId")] Orders orders)
+        public async Task<IActionResult> Edit(int id, [Bind("OrderId,Amount,OrderDate,ApplicationUserId,Firstname,Lastname,DeliveryAddress,DeliveryCity,DeliveryZip,PhoneNumber")] Orders orders)
         {
             if (id != orders.OrderId)
             {

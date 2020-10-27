@@ -35,6 +35,18 @@ namespace BookStore.Data
 
             modelBuilder.Entity<OrderHasProduct>().HasKey(sc => new { sc.OrderId, sc.ProductId });
 
+            modelBuilder.Entity<OrderHasProduct>()
+            .HasOne<Orders>(sc => sc.Orders)
+            .WithMany(s => s.OrderHasProducts)
+            .HasForeignKey(sc => sc.OrderId);
+
+
+            modelBuilder.Entity<OrderHasProduct>()
+                .HasOne(sc => sc.Product)
+                .WithMany(s => s.OrderHasProducts)
+                .HasForeignKey(sc => sc.ProductId);
+
+
             modelBuilder.Entity<Orders>(entity =>
             {
                 entity.Property(e => e.Amount).HasColumnType("decimal(18, 0)");

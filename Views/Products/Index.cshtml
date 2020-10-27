@@ -1,15 +1,23 @@
-﻿@model IEnumerable<BookStore.Models.Product>
+﻿@inject SignInManager<ApplicationUser> signInManager;
+@model IEnumerable<BookStore.Models.Product>
 
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Product List</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    @if (this.User.IsInRole("Admin")){<a asp-action="Create">Create New</a>}
 </p>
+<form asp-controller="Products" asp-action="Index">
+    <p>
+        Autor: <input type="text" name="id">
+        <input type="submit" value="Filter" />
+    </p>
+</form>
+
 <table class="table">
     <thead>
         <tr>
@@ -44,11 +52,11 @@
                 <td>
                     @foreach (var pic in item.Pictures)
                     {
-                        <img class="img" src="./image/@pic.Url" asp-append-version="true" width="120" height="100" />
+                        <div class="zoom"> <img class="img" src="./image/@pic.Url" asp-append-version="true" width="120" height="100" /></div>
                     }
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Title)                
+                    @Html.DisplayFor(modelItem => item.Title)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Autor)
@@ -66,9 +74,10 @@
                     @Html.DisplayFor(modelItem => item.LastUpdate)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+                    @if(this.User.IsInRole("Admin")){<a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+                        <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a>}|
+                    <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> 
+                    <br />|
                     <a asp-controller="cart" asp-action="buy" asp-route-id="@item.ProductId">Buy Now</a>
                 </td>
             </tr>

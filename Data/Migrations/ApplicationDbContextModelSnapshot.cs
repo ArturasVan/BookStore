@@ -15,7 +15,7 @@ namespace BookStore.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.8")
+                .HasAnnotation("ProductVersion", "3.1.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -47,8 +47,8 @@ namespace BookStore.Data.Migrations
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("OrdersOrderId")
-                        .HasColumnType("int");
+                    b.Property<string>("Autor")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -56,11 +56,15 @@ namespace BookStore.Data.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<int>("ReleaseYear")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("OrderId", "ProductId");
 
                     b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("OrdersOrderId");
 
                     b.HasIndex("ProductId");
 
@@ -450,7 +454,9 @@ namespace BookStore.Data.Migrations
 
                     b.HasOne("BookStore.Models.Orders", "Orders")
                         .WithMany("OrderHasProducts")
-                        .HasForeignKey("OrdersOrderId");
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BookStore.Models.Product", "Product")
                         .WithMany("OrderHasProducts")

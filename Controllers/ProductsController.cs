@@ -20,10 +20,27 @@ namespace BookStore
         }
 
         // GET: Products
-        public async Task<IActionResult> Index()
+        /*public async Task<IActionResult> Index()
         {
             return View(await _context.Product.Include(p => p.Pictures).ToListAsync());
+        }*/
+
+        public async Task<IActionResult> Index(string id)
+        {
+            var products = from p in _context.Product.Include(p => p.Pictures)
+                           select p;
+
+            if (!String.IsNullOrEmpty(id))
+            {
+                products = products.Where(s => s.Autor.Contains(id));
+            }
+
+
+            return View(await products.ToListAsync());
         }
+
+
+
 
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)

@@ -1,8 +1,38 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<h3 class="text-muted"> Welcome to BookStore Online Shopping!</h3>
+<div id="demo" class="carousel slide" data-ride="carousel">
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+
+    <!-- Indicators -->
+    <ul class="carousel-indicators">
+        <li data-target="#demo" data-slide-to="0" class="active"></li>
+        <li data-target="#demo" data-slide-to="1"></li>
+        <li data-target="#demo" data-slide-to="2"></li>
+    </ul>
+
+
+
+    <!-- The slideshow -->
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            New Edition #1 The Lying Stones of Marrakech
+        </div>
+        <div class="carousel-item">
+            New Edition #2 The pillow Book
+        </div>
+        <div class="carousel-item">
+            New Edition #3 Zorro
+        </div>
+        <div class="carousel-item">
+            New Edition #4 David Copperfield
+        </div>
+    </div>
+    <br />
+    <div>
+        <div><button type="button" class="btn btn-light btn-outline-dark" onclick="location.href='@Url.Action("Index","Products")'">Go To BookList &raquo;</button></div>
+        <p><img id="" src="~/image/lgbteca.jpg" class="img-fluid"></p>
+    </div>
 </div>
